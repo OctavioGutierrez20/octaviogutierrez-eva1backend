@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{% if object %}Editar contacto{% else %}Nuevo contacto{% endif %}{% endblock %}
+
+{% block content %}
+<h2>{% if object %}Editar contacto{% else %}Agregar contacto{% endif %}</h2>
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+    {% for field in form %}
+        <p>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+        </p>
+    {% endfor %}
+    <a href="{% url 'contactos:list' %}">Cancelar</a>
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Mis contactos{% endblock %}
+
+{% block content %}
+<h2>Lista de contactos</h2>
+<p>Total de contactos: {{ total_contacts }}</p>
+
+<form method="get">
+    <label for="search">Buscar por nombre o correo:</label>
+    <input id="search" type="search" name="q" value="{{ search_query }}">
+    <button type="submit">Buscar</button>
+</form>
+
+{% if contacts %}
+<ul>
+    {% for contact in contacts %}
+    <li>
+        <strong>{{ contact.name }}</strong><br>
+        Telefono: {{ contact.phone }}<br>
+        Correo: {{ contact.email }}<br>
+        Direccion: {{ contact.address }}<br>
+        <a href="{% url 'contactos:update' contact.pk %}">Editar</a> |
+        <a href="{% url 'contactos:delete' contact.pk %}">Eliminar</a>
+    </li>
+    <br>
+    {% endfor %}
+</ul>
+
+{% if is_paginated %}
+<p>
+    {% if page_obj.has_previous %}<a href="?q={{ search_query|urlencode }}&page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}
+    Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+    {% if page_obj.has_next %}<a href="?q={{ search_query|urlencode }}&page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}
+</p>
+{% endif %}
+{% else %}
+    {% if search_query %}<p>No se encontraron contactos.</p>{% else %}<p>No hay contactos guardados.</p>{% endif %}
+{% endif %}
+{% endblock %}
