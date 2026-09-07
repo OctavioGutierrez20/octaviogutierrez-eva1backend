@@ -9,6 +9,11 @@
 <form method="get">
     <label for="search">Buscar por nombre o correo:</label>
     <input id="search" type="search" name="q" value="{{ search_query }}">
+    <select id="filter_type" name="filter_type">
+        <option value="all" {% if filter_type == "all" %}selected{% endif %}>Nombre o Correo</option>
+        <option value="name" {% if filter_type == "name" %}selected{% endif %}>Solo Nombre</option>
+        <option value="email" {% if filter_type == "email" %}selected{% endif %}>Solo Correo</option>
+    </select>
     <button type="submit">Buscar</button>
 </form>
 
@@ -29,9 +34,9 @@
 
 {% if is_paginated %}
 <p>
-    {% if page_obj.has_previous %}<a href="?q={{ search_query|urlencode }}&page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}
+    {% if page_obj.has_previous %}<a href="?q={{ search_query|urlencode }}&filter_type={{ filter_type }}&page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}
     Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
-    {% if page_obj.has_next %}<a href="?q={{ search_query|urlencode }}&page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}
+    {% if page_obj.has_next %}<a href="?q={{ search_query|urlencode }}&filter_type={{ filter_type }}&page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}
 </p>
 {% endif %}
 {% else %}

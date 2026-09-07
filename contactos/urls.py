@@ -5,7 +5,7 @@ from .views import ContactCreateView, ContactDeleteView, ContactListView, Contac
 app_name = "contactos"
 
 urlpatterns = [
-    path("", ContactListView.as_view(), name="list"),
+    path("lista", ContactListView.as_view(), name="list"),
     path("nuevo/", ContactCreateView.as_view(), name="create"),
     path("<int:pk>/editar/", ContactUpdateView.as_view(), name="update"),
     path("<int:pk>/eliminar/", ContactDeleteView.as_view(), name="delete"),

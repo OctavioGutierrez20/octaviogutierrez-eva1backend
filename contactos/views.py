@@ -15,14 +15,21 @@ class ContactListView(ListView):
 
     def get_queryset(self):
         search = self.request.GET.get("q", "").strip()
+        filter_type = self.request.GET.get("filter_type", "all").strip()
         queryset = super().get_queryset()
         if search:
-            queryset = queryset.filter(Q(name__icontains=search) | Q(email__icontains=search))
+            if filter_type == "name":
+                queryset = queryset.filter(name__icontains=search)
+            elif filter_type == "email":
+                queryset = queryset.filter(email__icontains=search)
+            else:
+                queryset = queryset.filter(Q(name__icontains=search) | Q(email__icontains=search))
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["search_query"] = self.request.GET.get("q", "").strip()
+        context["filter_type"] = self.request.GET.get("filter_type", "all").strip()
         context["total_contacts"] = Contact.objects.count()
         return context
 
