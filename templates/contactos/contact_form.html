@@ -3,6 +3,22 @@
 {% block title %}{% if object %}Editar contacto{% else %}Nuevo contacto{% endif %}{% endblock %}
 
 {% block content %}
+<style>
+    h2 { color: #1a1a2e; font-size: 26px; font-weight: 700; margin-bottom: 30px; text-align: center; }
+    form { display: flex; flex-direction: column; gap: 20px; max-width: 600px; margin: 0 auto; }
+    .form-errors { background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); border: 2px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 8px; font-weight: 600; }
+    form p { display: flex; flex-direction: column; margin: 0; }
+    form label { margin-bottom: 8px; font-weight: 700; color: #1a1a2e; font-size: 14px; }
+    form input, form textarea { width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 14px; font-family: inherit; transition: all 0.3s; background-color: #f8f9fa; }
+    form input:focus, form textarea:focus { outline: none; border-color: #667eea; background-color: white; box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1); }
+    .error { color: #dc3545; font-size: 12px; margin-top: 5px; font-weight: 600; }
+    a { padding: 12px 30px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s; text-align: center; box-shadow: 0 4px 12px rgba(108, 117, 125, 0.25); border: none; cursor: pointer; font-size: 14px; }
+    a:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(108, 117, 125, 0.35); }
+    button { padding: 12px 30px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25); font-size: 14px; }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(40, 167, 69, 0.35); }
+    form > p:last-child { flex-direction: row; gap: 10px; justify-content: center; margin-top: 10px; }
+</style>
+
 <h2>{% if object %}Editar contacto{% else %}Agregar contacto{% endif %}</h2>
 <form method="post" novalidate>
     {% csrf_token %}
@@ -14,7 +30,9 @@
             {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
         </p>
     {% endfor %}
-    <a href="{% url 'contactos:list' %}">Cancelar</a>
-    <button type="submit">Guardar</button>
+    <p>
+        <a href="{% url 'contactos:list' %}">Cancelar</a>
+        <button type="submit">Guardar</button>
+    </p>
 </form>
 {% endblock %}

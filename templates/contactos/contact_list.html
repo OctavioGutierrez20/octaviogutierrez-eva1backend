@@ -3,17 +3,50 @@
 {% block title %}Mis contactos{% endblock %}
 
 {% block content %}
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    h2 { color: #1a1a2e; font-size: 28px; font-weight: 700; margin-bottom: 20px; }
+    p { color: #666; font-size: 14px; }
+    form { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; margin-bottom: 30px; display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2); }
+    form label { display: block; margin-bottom: 8px; font-weight: 600; color: white; font-size: 13px; }
+    form input, form select { width: 100%; padding: 11px; border: none; border-radius: 6px; font-size: 13px; font-family: inherit; }
+    form input { min-width: 250px; }
+    form select { min-width: 180px; }
+    form button { padding: 11px 24px; background-color: #ffc107; color: #1a1a2e; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+    form button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 193, 7, 0.35); }
+    ul { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); list-style: none; }
+    li { padding: 20px; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: flex-start; transition: all 0.3s; }
+    li:hover { background-color: #f8f9fa; }
+    li:last-child { border-bottom: none; }
+    strong { color: #1a1a2e; font-size: 16px; display: block; margin-bottom: 12px; }
+    li p { margin: 6px 0; font-size: 13px; }
+    
+    a { color: white; text-decoration: none; padding: 9px 16px; border-radius: 6px; font-weight: 600; font-size: 12px; transition: all 0.3s; display: inline-block; margin-top: 10px; }
+    a[href*="update"] { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25); }
+    a[href*="update"]:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(40, 167, 69, 0.35); }
+    a[href*="delete"] { background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%); box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25); }
+    a[href*="delete"]:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(220, 53, 69, 0.35); }
+    .pagination { display: flex; justify-content: center; gap: 12px; margin-top: 30px; padding: 20px; flex-wrap: wrap; }
+    .empty { background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); border: 2px solid #ffc107; border-radius: 12px; padding: 40px; text-align: center; color: #856404; }
+</style>
+
 <h2>Lista de contactos</h2>
 <p>Total de contactos: {{ total_contacts }}</p>
 
 <form method="get">
-    <label for="search">Buscar por nombre o correo:</label>
-    <input id="search" type="search" name="q" value="{{ search_query }}">
-    <select id="filter_type" name="filter_type">
-        <option value="all" {% if filter_type == "all" %}selected{% endif %}>Nombre o Correo</option>
-        <option value="name" {% if filter_type == "name" %}selected{% endif %}>Solo Nombre</option>
-        <option value="email" {% if filter_type == "email" %}selected{% endif %}>Solo Correo</option>
-    </select>
+    <div style="flex: 1; min-width: 250px;">
+        <label for="search">Buscar por nombre o correo:</label>
+        <input id="search" type="search" name="q" value="{{ search_query }}" placeholder="Ingresa nombre o correo...">
+    </div>
+    <div style="min-width: 180px;">
+        <label for="filter_type">Filtrar por:</label>
+        <select id="filter_type" name="filter_type">
+            <option value="all" {% if filter_type == "all" %}selected{% endif %}>Nombre o Correo</option>
+            <option value="name" {% if filter_type == "name" %}selected{% endif %}>Solo Nombre</option>
+            <option value="email" {% if filter_type == "email" %}selected{% endif %}>Solo Correo</option>
+        </select>
+    </div>
     <button type="submit">Buscar</button>
 </form>
 
@@ -33,13 +66,13 @@
 </ul>
 
 {% if is_paginated %}
-<p>
-    {% if page_obj.has_previous %}<a href="?q={{ search_query|urlencode }}&filter_type={{ filter_type }}&page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}
-    Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
-    {% if page_obj.has_next %}<a href="?q={{ search_query|urlencode }}&filter_type={{ filter_type }}&page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}
-</p>
+<div class="pagination">
+    {% if page_obj.has_previous %}<a href="?q={{ search_query|urlencode }}&filter_type={{ filter_type }}&page={{ page_obj.previous_page_number }}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);">Anterior</a>{% endif %}
+    <span style="padding: 9px 16px; font-weight: 600; color: #333;">Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}<a href="?q={{ search_query|urlencode }}&filter_type={{ filter_type }}&page={{ page_obj.next_page_number }}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);">Siguiente</a>{% endif %}
+</div>
 {% endif %}
 {% else %}
-    {% if search_query %}<p>No se encontraron contactos.</p>{% else %}<p>No hay contactos guardados.</p>{% endif %}
+    {% if search_query %}<div class="empty"><p>No se encontraron contactos.</p></div>{% else %}<div class="empty"><p>No hay contactos guardados.</p></div>{% endif %}
 {% endif %}
 {% endblock %}

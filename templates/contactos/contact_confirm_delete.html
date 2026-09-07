@@ -3,6 +3,16 @@
 {% block title %}Eliminar contacto{% endblock %}
 
 {% block content %}
+<style>
+    h2 { color: #856404; margin-bottom: 20px; font-size: 24px; font-weight: 700; text-align: center; }
+    p { color: #856404; text-align: center; font-size: 16px; margin-bottom: 20px; }
+    form { max-width: 500px; margin: 0 auto; background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); border: 3px solid #ffc107; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 10px 30px rgba(255, 193, 7, 0.2); display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    a { padding: 12px 30px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s; box-shadow: 0 4px 12px rgba(108, 117, 125, 0.25); border: none; cursor: pointer; font-size: 14px; }
+    a:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(108, 117, 125, 0.35); }
+    button { padding: 12px 30px; background: linear-gradient(135deg, #dc3545 0%, #ff6b6b 100%); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-size: 14px; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25); }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(220, 53, 69, 0.35); }
+</style>
+
 <h2>Eliminar contacto</h2>
 <p>¿Seguro que quieres eliminar a {{ object.name }}?</p>
 <form method="post">{% csrf_token %}<a href="{% url 'contactos:list' %}">Cancelar</a> <button type="submit">Eliminar</button></form>
