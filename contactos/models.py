@@ -3,7 +3,7 @@ from django.db import models
 
 class Contact(models.Model):
     name = models.CharField("nombre", max_length=120)
-    phone = models.CharField("telefono", max_length=30)
+    phone = models.CharField("telefono", max_length=30, default='+56 9')
     email = models.EmailField("correo electronico", unique=True)
     address = models.TextField("direccion")
     created_at = models.DateTimeField("fecha de creacion", auto_now_add=True)
