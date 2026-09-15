@@ -8,5 +8,3 @@ class contactAdmin(admin.ModelAdmin):
     ordering = ("nombre", "stock",)
 
 admin.site.register(model_or_iterable=Contact, admin_class=contactAdmin)
-
-
