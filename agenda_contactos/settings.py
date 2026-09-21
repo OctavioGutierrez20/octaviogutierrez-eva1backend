@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-agenda-contactos-local"
 DEBUG = True
 ALLOWED_HOSTS = [
-    'octaviogutierrez-eva1backend.vercel.app'
+    'octaviogutierrez-eva1backend.vercel.app',
     'localhost',
     '127.0.0.1'
 ]
