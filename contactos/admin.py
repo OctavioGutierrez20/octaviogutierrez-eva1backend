@@ -2,9 +2,9 @@ from django.contrib import admin
 from .models import Contact
 
 class contactAdmin(admin.ModelAdmin):
-    list_display = ("nombre","precio","stock","activo")
-    search_fields = ("nombre",)
-    list_filter = ("activo",)
-    ordering = ("nombre", "stock",)
+    list_display = ("name","phone","email","address")
+    search_fields = ("name",)
+    list_filter = ("phone",)
+    ordering = ("name", "address",)
 
 admin.site.register(model_or_iterable=Contact, admin_class=contactAdmin)
