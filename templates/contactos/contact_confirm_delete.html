@@ -1,6 +1,124 @@
 {% extends "base.html" %}
 
-{% block title %}Eliminar contacto{% endblock %}
+{% block title %}Eliminar Contacto{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .delete-container {
+        max-width: 500px;
+        margin: 60px auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .delete-header {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+    }
+    
+    .delete-header h2 {
+        margin: 0 0 10px 0;
+        color: white;
+        font-size: 2rem;
+    }
+    
+    .delete-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+    
+    .delete-body {
+        padding: 40px 30px;
+        text-align: center;
+    }
+    
+    .contact-name-display {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #fef2f2;
+        border-radius: 8px;
+        border-left: 4px solid #ef4444;
+    }
+    
+    .warning-message {
+        color: #6b7280;
+        font-size: 1.1rem;
+        margin: 25px 0;
+        line-height: 1.6;
+    }
+    
+    .warning-highlight {
+        color: #ef4444;
+        font-weight: 600;
+    }
+    
+    .delete-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 2px solid #e5e7eb;
+    }
+    
+    .btn-action-delete {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .btn-confirm-delete {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+    }
+    
+    .btn-confirm-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+    }
+    
+    .btn-cancel-delete {
+        background-color: #e5e7eb;
+        color: #374151;
+    }
+    
+    .btn-cancel-delete:hover {
+        background-color: #d1d5db;
+        transform: translateY(-2px);
+    }
+    
+    .alert-box {
+        background-color: #fee2e2;
+        border-left: 4px solid #ef4444;
+        color: #991b1b;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .alert-icon {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <style>

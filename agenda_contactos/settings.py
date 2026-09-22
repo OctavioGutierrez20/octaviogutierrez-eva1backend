@@ -9,12 +9,27 @@ db_database=os.getenv("database")
 db_user=os.getenv("user")
 db_password=os.getenv("password")
 
+from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv( )
+db_host = os.getenv("host")
+db_port = os.getenv("port")
+db_database = os.getenv("database")
+db_user = os.getenv("user")
+db_password = os.getenv("password")
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-agenda-contactos-local"
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'octaviogutierrez-eva1backend.vercel.app',
+    'localhost',
+    '127.0.0.1'
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
