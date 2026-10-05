@@ -1,10 +1,29 @@
 from django.contrib import admin
+
 from .models import Contact
 
-class contactAdmin(admin.ModelAdmin):
-    list_display = ("name","phone","email","address")
-    search_fields = ("name",)
-    list_filter = ("phone",)
-    ordering = ("name", "address",)
 
-admin.site.register(model_or_iterable=Contact, admin_class=contactAdmin)
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "phone",
+        "email",
+        "address",
+        "created_at",
+        "updated_at",
+    )
+    search_fields = ("name", "email")
+    list_filter = ("created_at", "updated_at")
+    ordering = ("name", "email")
+    readonly_fields = ("created_at", "updated_at")
+    fieldsets = (
+        (
+            "Informacion del contacto",
+            {"fields": ("name", "phone", "email", "address")},
+        ),
+        (
+            "Metadatos",
+            {"fields": ("created_at", "updated_at")},
+        ),
+    )
