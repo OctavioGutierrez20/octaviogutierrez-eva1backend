@@ -31,9 +31,28 @@ Luego abre `http://127.0.0.1:8000/` en el navegador.
 - Persistir la informacion en SQLite.
 - Administrar contactos desde `/admin/`.
 
+## Administracion en Django Admin
+
+1. Crea un superusuario:
+
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+2. Inicia el servidor:
+
+   ```bash
+   python manage.py runserver
+   ```
+
+3. Accede a `http://127.0.0.1:8000/admin/` e inicia sesion con el superusuario.
+
+Desde el panel admin puedes demostrar los indicadores del caso 3 sobre contactos:
+crear, buscar por nombre o correo, editar y eliminar, viendo ademas las fechas de
+creacion y actualizacion.
+
 Para ejecutar las pruebas:
 
 ```bash
 python manage.py test
 ```
-
