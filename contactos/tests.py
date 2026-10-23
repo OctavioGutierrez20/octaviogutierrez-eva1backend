@@ -1,6 +1,8 @@
+from django.contrib import admin
 from django.test import TestCase
 from django.urls import reverse
 
+from .admin import ContactAdmin
 from .forms import ContactForm
 from .models import Contact
 
@@ -33,3 +35,24 @@ class ContactViewsTests(TestCase):
         response = self.client.post(reverse("contactos:create"), {"name": "Otra Persona", "phone": "+56987654321", "email": "ana@example.com", "address": "Los Robles 45"})
         self.assertEqual(response.status_code, 200)
         self.assertIn("email", response.context["form"].errors)
+
+
+class ContactAdminTests(TestCase):
+    def test_contact_is_registered_with_contact_admin(self):
+        self.assertIn(Contact, admin.site._registry)
+        self.assertIsInstance(admin.site._registry[Contact], ContactAdmin)
+
+    def test_admin_configuration_supports_case_3_indicators(self):
+        contact_admin = admin.site._registry[Contact]
+
+        self.assertEqual(
+            contact_admin.list_display,
+            ("name", "phone", "email", "address", "created_at", "updated_at"),
+        )
+        self.assertEqual(contact_admin.search_fields, ("name", "email"))
+        self.assertEqual(contact_admin.list_filter, ("created_at", "updated_at"))
+        self.assertEqual(contact_admin.ordering, ("name", "email"))
+        self.assertEqual(
+            contact_admin.readonly_fields,
+            ("created_at", "updated_at"),
+        )
