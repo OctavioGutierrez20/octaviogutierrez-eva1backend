@@ -8,5 +8,5 @@ class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ProductoSerializer
 
-routers = routers.DefaultRouter()
-routers.register(r'Contact', ProductoViewSet)
+router = routers.DefaultRouter()
+router.register(r'Contact', ProductoViewSet)

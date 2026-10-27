@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "contactos",
     "rest_framework",
-     "rest_framework_simplejwt",
+    "rest_framework_simplejwt",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -52,18 +53,17 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMidleware",
+    "django,middleware.common.CommonMiddleware",
 ]
 
 REST_FRAMEWORK = {
 
-'DEFAULT_AUTHENTICATION_CLASSES' : (
-    'rest_framework_simplejwt.authentication.JWTAuthentication',
-),
-
-'DEFAULT_PERMISSION_CLASSES':(
-    'rest_freamework.permissions.IsAuthenticated'
-)
-
+    'DEFAULT_AUTHENTICATION_CLASSES' : (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES':(
+        'rest_framework.permissions.IsAuthenticated',   )
 }
 
 ROOT_URLCONF = "agenda_contactos.urls"
