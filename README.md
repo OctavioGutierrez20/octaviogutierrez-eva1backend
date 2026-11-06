@@ -1,39 +1,77 @@
 # Agenda Clara
 
-Aplicacion Django para gestionar una agenda de contactos personales. Implementa el
-caso 3 de la evaluacion de Programacion Backend: agregar contactos con nombre,
-telefono, correo y direccion; buscar por nombre o correo; y validar el formato del
-correo electronico.
+Agenda de contactos hecha con Django. Incluye una API REST protegida con JWT y
+un cliente web sencillo que permite iniciar sesión y gestionar contactos.
 
 ## Requisitos
 
 - Python 3.10 o superior
-- Django 5
+- PostgreSQL
 
-## Instalacion y ejecucion
+## Preparar el backend
 
-```bash
+En Windows PowerShell:
+
+```powershell
 python -m venv .venv
-# En Windows PowerShell
-.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+Copy-Item .env.example .env
+```
+
+Completa en `.env` los datos de conexión a PostgreSQL y define una clave privada
+para `DJANGO_SECRET_KEY`. Luego ejecuta:
+
+```powershell
 python manage.py migrate
+python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Luego abre `http://127.0.0.1:8000/` en el navegador.
+El backend queda disponible en `http://127.0.0.1:8000/`.
 
-## Funcionalidades
+## Ejecutar el cliente web
 
-- Crear, editar y eliminar contactos.
-- Buscar contactos por nombre o correo electronico.
-- Validar nombre, telefono, direccion y correo con formularios Django.
-- Persistir la informacion en SQLite.
-- Administrar contactos desde `/admin/`.
+Abre otra terminal en la carpeta del proyecto y ejecuta:
 
-Para ejecutar las pruebas:
-
-```bash
-python manage.py test
+```powershell
+python -m http.server 5500 --directory cliente
 ```
 
+Abre `http://localhost:5500`. Inicia sesión con el usuario Django creado arriba.
+El cliente obtiene el token JWT y permite listar, crear, editar y eliminar
+contactos desde la API.
+
+Si el backend está en otra dirección, cambia `API_URL` al inicio de
+`cliente/app.js`. Para ejecutar el cliente desde otra dirección, agrega su origen
+exacto a `CLIENT_ORIGINS` en `.env` y reinicia Django.
+
+## API
+
+- `POST /api/token/`: obtener access y refresh tokens.
+- `POST /api/token/refresh/`: renovar el access token.
+- `/api/contacts/`: listar y crear contactos.
+- `/api/contacts/<id>/`: consultar, editar y eliminar un contacto.
+
+Las rutas de contactos requieren el encabezado
+`Authorization: Bearer <access-token>`.
+
+## Despliegue
+
+Al desplegar, configura las variables de entorno de PostgreSQL, `DJANGO_SECRET_KEY`,
+`DEBUG=False` y `CLIENT_ORIGINS` con el origen real del cliente. Comprueba que el
+dominio del backend esté en `ALLOWED_HOSTS`.
+
+El dominio del backend configurado en el proyecto es
+`https://octaviogutierrez-eva1backend.vercel.app`. Al probar la API durante esta
+implementación respondió con error 500; hay que revisar las variables y los logs
+del despliegue y volver a desplegar antes de presentar la URL como operativa.
+
+## Pruebas
+
+```powershell
+python manage.py test --keepdb
+```
+
+Las pruebas cubren autenticación JWT, operaciones CRUD y CORS desde el cliente
+local.

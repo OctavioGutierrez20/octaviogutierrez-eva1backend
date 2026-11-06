@@ -1,30 +1,24 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 
 load_dotenv()
-db_host=os.getenv("host")
-db_port=os.getenv("port")
-db_database=os.getenv("database")
-db_user=os.getenv("user")
-db_password=os.getenv("password")
-
-from pathlib import Path
-import os
-from dotenv import load_dotenv
-
-load_dotenv( )
 db_host = os.getenv("host")
 db_port = os.getenv("port")
 db_database = os.getenv("database")
 db_user = os.getenv("user")
 db_password = os.getenv("password")
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-agenda-contactos-local"
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    if not DEBUG:
+        raise ImproperlyConfigured("Define DJANGO_SECRET_KEY antes de desplegar.")
+    SECRET_KEY = "django-insecure-agenda-contactos-local"
+
 ALLOWED_HOSTS = [
     'octaviogutierrez-eva1backend.vercel.app',
     'localhost',
@@ -48,22 +42,30 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMidleware",
-    "django,middleware.common.CommonMiddleware",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "CLIENT_ORIGINS",
+        "http://localhost:5500,http://127.0.0.1:5500",
+    ).split(",")
+    if origin.strip()
 ]
 
 REST_FRAMEWORK = {
-
     'DEFAULT_AUTHENTICATION_CLASSES' : (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES':(
-        'rest_framework.permissions.IsAuthenticated',   )
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
 ROOT_URLCONF = "agenda_contactos.urls"

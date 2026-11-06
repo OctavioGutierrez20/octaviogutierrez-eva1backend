@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agenda de contactos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="page">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Agenda Clara</p>
+                <h1>Contactos</h1>
+                <p>Administra tu agenda desde el cliente conectado a la API.</p>
+            </div>
+        </header>
+
+        <p id="message" class="message hidden" role="status"></p>
+
+        <section id="login-section" class="panel">
+            <h2>Iniciar sesión</h2>
+            <p>Ingresa con tu usuario de Django para acceder a la agenda.</p>
+            <form id="login-form" class="form">
+                <label>
+                    Usuario
+                    <input name="username" autocomplete="username" required>
+                </label>
+                <label>
+                    Contraseña
+                    <input name="password" type="password" autocomplete="current-password" required>
+                </label>
+                <button class="button" type="submit">Entrar</button>
+            </form>
+        </section>
+
+        <section id="contacts-section" class="hidden">
+            <div class="columns">
+                <section class="panel">
+                    <h2 id="form-title">Agregar contacto</h2>
+                    <form id="contact-form" class="form">
+                        <label>
+                            Nombre
+                            <input name="name" maxlength="120" required>
+                        </label>
+                        <label>
+                            Teléfono
+                            <input name="phone" maxlength="30" required>
+                        </label>
+                        <label>
+                            Correo
+                            <input name="email" type="email" required>
+                        </label>
+                        <label>
+                            Dirección
+                            <textarea name="address" rows="3" required></textarea>
+                        </label>
+                        <div class="form-buttons">
+                            <button id="save-button" class="button" type="submit">Guardar contacto</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="panel">
+                    <div class="contacts-heading">
+                        <div>
+                            <h2>Mis contactos</h2>
+                            <p id="contacts-count">Conectando...</p>
+                        </div>
+                    </div>
+                    <p id="loading" class="loading hidden">Cargando contactos...</p>
+                    <div id="contacts-list" class="contacts-list"></div>
+                </section>
+            </div>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>

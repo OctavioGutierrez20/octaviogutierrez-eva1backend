@@ -1,12 +1,13 @@
-from rest_framework import routers, viewsets    
+from rest_framework import routers, viewsets
 
 from .models import Contact
+from .serializers import ContactSerializer
 
-from .serializers import ProductoSerializer
 
-class ProductoViewSet(viewsets.ModelViewSet):
+class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
-    serializer_class = ProductoSerializer
+    serializer_class = ContactSerializer
+
 
 router = routers.DefaultRouter()
-router.register(r'Contact', ProductoViewSet)
+router.register(r"contacts", ContactViewSet)
