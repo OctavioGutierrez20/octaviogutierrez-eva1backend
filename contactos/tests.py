@@ -7,6 +7,15 @@ from .forms import ContactForm
 from .models import Contact
 
 
+class BackendHealthTests(TestCase):
+    def test_health_endpoint(self):
+        for path in ("/", "/health/"):
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.json()["status"], "ok")
+
+
 class ContactFormTests(TestCase):
     def test_rejects_invalid_email(self):
         form = ContactForm(data={"name": "Ana Perez", "phone": "+56912345678", "email": "correo-invalido", "address": "Av. Central 123"})
