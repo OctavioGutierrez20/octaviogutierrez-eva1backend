@@ -1,50 +1,89 @@
 # Agenda Clara
 
 Agenda de contactos hecha con Django. Incluye una API REST protegida con JWT y
-un cliente web sencillo que permite iniciar sesión y gestionar contactos.
+un cliente web React para iniciar sesión y gestionar contactos.
 
 ## Requisitos
 
 - Python 3.10 o superior
-- PostgreSQL
+- Node.js 20.19+ o 22.12+ para ejecutar el cliente React
+- PostgreSQL si no vas a usar la base de datos SQLite local
 
-## Preparar el backend
+## Ejecutar backend y frontend en local
 
-En Windows PowerShell:
+Ejecuta cada parte en una terminal independiente de PowerShell y deja ambas
+terminales abiertas mientras usas la aplicación. Los comandos de esta sección
+parten desde la carpeta raíz del repositorio, que contiene las carpetas
+`octaviogutierrez-eva1backend` y `front-end`.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-Copy-Item .env.example .env
-```
+### 1. Preparar e iniciar el backend
 
-Completa en `.env` los datos de conexión a PostgreSQL y define una clave privada
-para `DJANGO_SECRET_KEY`. Luego ejecuta:
+En la primera terminal:
 
 ```powershell
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
+cd .\octaviogutierrez-eva1backend
+if (-not (Test-Path .venv)) { python -m venv .venv }
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 ```
 
-El backend queda disponible en `http://127.0.0.1:8000/`.
+Edita `.env` y configura la conexión a PostgreSQL y `DJANGO_SECRET_KEY`. Si
+quieres usar SQLite local, deja vacías las variables `DB_HOST`, `DB_PORT`,
+`DB_NAME`, `DB_USER` y `DB_PASSWORD`. Conserva en `CLIENT_ORIGINS` el origen
+local del frontend (`http://localhost:5500` y
+`http://127.0.0.1:5500`).
 
-## Ejecutar el cliente web
-
-Abre otra terminal en la carpeta del proyecto y ejecuta:
+Aplica las migraciones y, si aún no tienes un usuario, créalo:
 
 ```powershell
-python -m http.server 5500 --directory cliente
+.\.venv\Scripts\python.exe manage.py migrate
+.\.venv\Scripts\python.exe manage.py createsuperuser
 ```
 
-Abre `http://localhost:5500`. Inicia sesión con el usuario Django creado arriba.
-El cliente obtiene el token JWT y permite listar, crear, editar y eliminar
-contactos desde la API.
+Inicia Django:
 
-Si el backend está en otra dirección, cambia `API_URL` al inicio de
-`cliente/app.js`. Para ejecutar el cliente desde otra dirección, agrega su origen
-exacto a `CLIENT_ORIGINS` en `.env` y reinicia Django.
+```powershell
+.\.venv\Scripts\python.exe manage.py runserver 127.0.0.1:8000
+```
+
+Deja esta terminal abierta. Django debe indicar que está ejecutándose en
+`http://127.0.0.1:8000/`.
+
+### 2. Preparar e iniciar el frontend React
+
+Abre una segunda terminal. Desde la raíz del repositorio:
+
+```powershell
+cd .\front-end
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+npm.cmd install
+npm.cmd run dev
+```
+
+Comprueba que `front-end/.env` contenga:
+
+```text
+VITE_API_URL=http://127.0.0.1:8000
+```
+
+Abre la dirección **Local** que muestre Vite (normalmente
+`http://localhost:5500`) e inicia sesión con el usuario Django. Usa la dirección
+Local, no la dirección Network. Para que las peticiones lleguen a Django,
+ambos servidores deben seguir ejecutándose.
+
+Si el puerto 5500 está ocupado, no detengas un servicio desconocido. Inicia
+Vite en el puerto 5510:
+
+```powershell
+npm.cmd run dev -- --host 127.0.0.1 --port 5510
+```
+
+Agrega `http://localhost:5510` y `http://127.0.0.1:5510` a
+`CLIENT_ORIGINS` en el `.env` del backend y reinicia Django. Luego abre
+`http://127.0.0.1:5510`.
+
+Para instrucciones del cliente por separado, consulta
+[el repositorio del frontend en GitHub](https://github.com/OctavioGutierrez20/front-end#readme).
 
 ## API
 
@@ -62,15 +101,19 @@ Al desplegar, configura las variables de entorno de PostgreSQL, `DJANGO_SECRET_K
 `DEBUG=False` y `CLIENT_ORIGINS` con el origen real del cliente. Comprueba que el
 dominio del backend esté en `ALLOWED_HOSTS`.
 
-El dominio del backend configurado en el proyecto es
-`https://octaviogutierrez-eva1backend.vercel.app`. Al probar la API durante esta
-implementación respondió con error 500; hay que revisar las variables y los logs
-del despliegue y volver a desplegar antes de presentar la URL como operativa.
+La configuración de despliegue incluye `vercel.json` y `runtime.txt` para facilitar
+la publicación del backend en Vercel. La URL pública esperada para la API es:
+`https://octaviogutierrez-eva1backend.vercel.app`.
+
+La API debe quedar accesible con los endpoints `/api/token/`, `/api/token/refresh/`
+y `/api/contacts/` y responder con JSON válido. Este proyecto ya incluye CORS con
+`django-cors-headers` para aceptar al cliente en `http://localhost:5500` y en el
+origen real del despliegue.
 
 ## Pruebas
 
 ```powershell
-python manage.py test --keepdb
+.\.venv\Scripts\python.exe manage.py test --keepdb
 ```
 
 Las pruebas cubren autenticación JWT, operaciones CRUD y CORS desde el cliente
