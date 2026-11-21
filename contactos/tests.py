@@ -111,3 +111,17 @@ class ContactApiTests(TestCase):
             response["Access-Control-Allow-Origin"],
             "http://localhost:5500",
         )
+
+    def test_refresh_token_returns_new_access_token(self):
+        token_response = self.client.post(
+            "/api/token/",
+            {"username": "api-user", "password": "test-password-123"},
+            format="json",
+        )
+        refresh_response = self.client.post(
+            "/api/token/refresh/",
+            {"refresh": token_response.data["refresh"]},
+            format="json",
+        )
+        self.assertEqual(refresh_response.status_code, 200)
+        self.assertIn("access", refresh_response.data)
