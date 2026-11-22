@@ -13,7 +13,14 @@ class BackendHealthTests(TestCase):
             with self.subTest(path=path):
                 response = self.client.get(path)
                 self.assertEqual(response.status_code, 200)
-                self.assertEqual(response.json()["status"], "ok")
+                self.assertEqual(
+                    response.json(),
+                    {"status": "ok", "service": "agenda-clara-backend"},
+                )
+
+    def test_homepage_shows_health_json(self):
+        response = self.client.get("/")
+        self.assertEqual(response.json()["status"], "ok")
 
 
 class ContactFormTests(TestCase):
